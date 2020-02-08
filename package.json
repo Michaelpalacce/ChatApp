@@ -2,10 +2,12 @@
   "name": "chatapp",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "node ./tests/test_script.js",
+    "testwatch": "nodemon ./tests/test_script.js",
+    "start": "node index.js",
+    "startwatch": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
