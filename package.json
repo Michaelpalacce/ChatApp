@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "ejs": "^3.0.1",
-    "event_request": "10.0.0",
+    "event_request": "^10.0.2",
     "moment": "^2.24.0",
     "socket.io": "^2.3.0"
   }

@@ -13,12 +13,13 @@ const {
 /**
  * @brief	Instantiate the server
  */
-const app		= Server();
-const server	= http.createServer( Server.attach() );
-const io		= socketIO( server );
+const app			= Server();
+const server		= http.createServer( Server.attach() );
+const io			= socketIO( server );
+const templateDir	= path.join( path.dirname( require.main.filename ), './public' );
 
 app.apply( 'er_static_resources', { paths : ['public'] } );
-app.apply( 'er_templating_engine', { templateDir : path.join( path.dirname( require.main.filename ), './public' ), engine: ejs } );
+app.apply( 'er_templating_engine', { templateDir } );
 
 app.get( '/',( event )=>{
 	event.render( 'index' );
