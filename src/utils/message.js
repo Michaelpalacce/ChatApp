@@ -1,7 +1,8 @@
 'use strict';
+const moment	= require( 'moment' );
 
 function getCurrentTime() {
-	return Math.floor( new Date().getTime() / 1000 );
+	return moment().valueOf();
 }
 
 /**

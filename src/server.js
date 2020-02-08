@@ -27,15 +27,17 @@ app.get( '/',( event )=>{
 io.on( 'connection', ( socket )=>{
 	socket.emit( 'newMessage', generateMessage( 'ADMIN', 'Welcome to the chat app' ) );
 
-	socket.broadcast.emit( 'newMessage', generateMessage( 'ADMIN', 'New user joined' ));
+	socket.broadcast.emit( 'newMessage', generateMessage( 'ADMIN', 'New user joined' ) );
 
 	socket.on( 'createMessage', ( message, callback )=>{
-		socket.broadcast.emit( 'newMessage', generateMessage( message.from, message.text ));
-		callback( 'From the server' );
+		message	= generateMessage( message.from, message.text );
+		console.log( message )
+		socket.broadcast.emit( 'newMessage', message );
+		callback();
 	});
 
 	socket.on( 'createLocationMessage', ( message )=>{
-		socket.broadcast.emit( 'newLocationMessage', generateLocationMessage( message.from, message.latitude, message.longitude ));
+		socket.broadcast.emit( 'newLocationMessage', generateLocationMessage( message.from, message.latitude, message.longitude ) );
 	});
 
 	socket.on( 'disconnect', ()=>{

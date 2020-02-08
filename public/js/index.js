@@ -1,5 +1,7 @@
 const socket	= io();
 const messages	= $( '#messages' );
+const input		= $( '#message-input' );
+
 const userName	= 'Stefan';
 
 socket.on( 'connect', ()=>{
@@ -11,23 +13,25 @@ socket.on( 'disconnect', ()=>{
 });
 
 socket.on( 'newMessage', ( newMessage )=>{
+	const formattedTime	= moment( newMessage.createdAt ).format( 'H:MM' );
+
 	const li	= $( '<li></li>');
-	li.text( `${newMessage.from}: ${newMessage.text}` );
+	li.text( `${newMessage.from} ${formattedTime}: ${newMessage.text}` );
 	messages.append( li );
 });
 
 socket.on( 'newLocationMessage', ( newMessage )=>{
-	const li	= $( '<li></li>' );
-	const a		= $( '<a target="_blank">My current location</a>' );
+	const formattedTime	= moment( newMessage.createdAt ).format( 'H:MM' );
+	const li			= $( '<li></li>' );
+	const a				= $( '<a target="_blank">My current location</a>' );
 
-	li.text( `${newMessage.from}` );
+	li.text( `${newMessage.from} ${formattedTime}: ` );
 	a.attr( 'href', newMessage.url );
 	li.append( a );
 	messages.append( li );
 });
 
 $( '#message-form' ).on( 'submit', ( e )=>{
-	const input	= $( '#message-input' );
 	e.preventDefault();
 	socket.emit( 'createMessage',
 		{
@@ -36,7 +40,7 @@ $( '#message-form' ).on( 'submit', ( e )=>{
 		},
 		( data )=>{
 			console.log( 'Acknowledged!', data );
-			input.val( '' );
+			input.val('');
 		}
 	);
 });
@@ -48,13 +52,20 @@ locationButton.on( 'click', ()=>{
 		return alert( 'Geolocation not supported by your browser!' );
 	}
 
+	locationButton.attr( 'disabled', 'disabled' ).text( 'Sending location...' );
+
 	navigator.geolocation.getCurrentPosition( ( position )=>{
+		locationButton.removeAttr( 'disabled' ).text( 'Send Location' );
 		socket.emit( 'createLocationMessage', {
 			from: userName,
 			latitude: position.coords.latitude,
 			longitude: position.coords.longitude
 		});
 	}, ()=>{
+		locationButton.removeAttr( 'disabled' ).text( 'Send Location' );
 		alert( 'Unable to fetch location.' );
 	})
 });
+
+input.focus();
+input.select();
