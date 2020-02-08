@@ -31,7 +31,6 @@ io.on( 'connection', ( socket )=>{
 
 	socket.on( 'createMessage', ( message, callback )=>{
 		message	= generateMessage( message.from, message.text );
-		console.log( message )
 		socket.broadcast.emit( 'newMessage', message );
 		callback();
 	});
