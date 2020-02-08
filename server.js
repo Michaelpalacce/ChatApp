@@ -23,12 +23,20 @@ app.get( '/',( event )=>{
 io.on( 'connection', ( socket )=>{
 	Loggur.log( 'New user connected' );
 
+	socket.on( 'createMessage', ( message )=>{
+		Loggur.log( message );
+	});
+
 	socket.on( 'disconnect', ()=>{
-		console.log( 'User Disconnected' )
-	} );
+		Loggur.log( 'User Disconnected' )
+	});
+
+	socket.emit( 'newMessage', {
+		from: 'Stefan',
+		text: 'Hello from yourself!',
+		createdAt: Math.floor( new Date().getTime() / 1000 )
+	})
 } );
-
-
 
 server.listen( process.env.PORT || 3000, '0.0.0.0', ()=>{
 	Loggur.log( 'Server is UN' );
