@@ -5,7 +5,10 @@ const ejs					= require( 'ejs' );
 const socketIO				= require( 'socket.io' );
 const path					= require( 'path' );
 const http					= require( 'http' );
-const { generateMessage }	= require( './utils/message' );
+const {
+	generateMessage,
+	generateLocationMessage
+}	= require( './utils/message' );
 
 /**
  * @brief	Instantiate the server
@@ -29,6 +32,10 @@ io.on( 'connection', ( socket )=>{
 	socket.on( 'createMessage', ( message, callback )=>{
 		socket.broadcast.emit( 'newMessage', generateMessage( message.from, message.text ));
 		callback( 'From the server' );
+	});
+
+	socket.on( 'createLocationMessage', ( message )=>{
+		socket.broadcast.emit( 'newLocationMessage', generateLocationMessage( message.from, message.latitude, message.longitude ));
 	});
 
 	socket.on( 'disconnect', ()=>{
