@@ -21,10 +21,20 @@ app.get( '/',( event )=>{
 });
 
 io.on( 'connection', ( socket )=>{
-	Loggur.log( 'New user connected' );
+	socket.emit( 'newMessage', {
+		from: 'ADMIN',
+		text: 'Welcome to the chat app',
+		createdAt: Math.floor( new Date().getTime() / 1000 )
+	});
+
+	socket.broadcast.emit( 'newMessage', {
+		from: 'ADMIN',
+		text: 'New User joined',
+		createdAt: Math.floor( new Date().getTime() / 1000 )
+	});
 
 	socket.on( 'createMessage', ( message )=>{
-		io.emit( 'newMessage', {
+		socket.broadcast.emit( 'newMessage', {
 			from: message.from,
 			text: message.text,
 			createdAt: Math.floor( new Date().getTime() / 1000 )
@@ -36,12 +46,6 @@ io.on( 'connection', ( socket )=>{
 	socket.on( 'disconnect', ()=>{
 		Loggur.log( 'User Disconnected' )
 	});
-
-	socket.emit( 'newMessage', {
-		from: 'ADMIN',
-		text: 'Welcome to the chat room',
-		createdAt: Math.floor( new Date().getTime() / 1000 )
-	})
 } );
 
 server.listen( process.env.PORT || 3000, '0.0.0.0', ()=>{
