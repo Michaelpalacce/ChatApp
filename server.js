@@ -24,6 +24,12 @@ io.on( 'connection', ( socket )=>{
 	Loggur.log( 'New user connected' );
 
 	socket.on( 'createMessage', ( message )=>{
+		io.emit( 'newMessage', {
+			from: message.from,
+			text: message.text,
+			createdAt: Math.floor( new Date().getTime() / 1000 )
+		});
+
 		Loggur.log( message );
 	});
 
@@ -32,8 +38,8 @@ io.on( 'connection', ( socket )=>{
 	});
 
 	socket.emit( 'newMessage', {
-		from: 'Stefan',
-		text: 'Hello from yourself!',
+		from: 'ADMIN',
+		text: 'Welcome to the chat room',
 		createdAt: Math.floor( new Date().getTime() / 1000 )
 	})
 } );
